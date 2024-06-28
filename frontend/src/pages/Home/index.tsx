@@ -1,6 +1,7 @@
 import EmployeeCardComponent from '@/components/EmployeeCardComponent';
 import { TEST_EVENT, useAppDispatch } from '@/core/redux/action';
-import { Button, Form, Input, Typography } from 'antd';
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Input, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,21 +14,42 @@ const HomePageComponent: React.FC = () => {
   return (
     <>
       <Typography.Title level={2}>List employee</Typography.Title>
-      <div className="grid grid-cols-8">
-        <Form className="col-span-3">
-          <Form.Item label="Search Name">
-            <Input.Search placeholder="Enter employee name..." allowClear enterButton="Search" />
-          </Form.Item>
-        </Form>
-        <span className="col-span-4" />
+      <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-0">
+        <div className="col-span-3 md:col-span-4">
+          <Input.Search
+            className="hidden md:block"
+            addonBefore="Search Name"
+            placeholder="Typing..."
+            allowClear
+            enterButton={
+              <Button type="primary">
+                <SearchOutlined className="md:hidden" />
+                <span className="hidden md:block">Search</span>
+              </Button>
+            }
+          />
+          <Input.Search
+            className="md:hidden"
+            placeholder="Typing..."
+            allowClear
+            enterButton={
+              <Button type="primary">
+                <SearchOutlined className="md:hidden" />
+                <span className="hidden md:block">Search</span>
+              </Button>
+            }
+          />
+        </div>
+        <span className="hidden md:block lg:col-span-3" />
         <Link to="/create">
           <Button type="primary" className="bg-green-600 hover:bg-green-500 w-full">
-            Add Employee
+            <PlusOutlined className="md:hidden" />
+            <span className="hidden md:block">Add Employee</span>
           </Button>
         </Link>
       </div>
 
-      <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-16">
         {Array.from(Array(20).keys()).map((item) => (
           <li key={`porforlio-${item}`}>
             <EmployeeCardComponent />

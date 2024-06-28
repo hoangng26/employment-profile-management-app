@@ -19,15 +19,6 @@
     user-select: none;
   }
 
-  :root {
-    overflow-y: hidden;
-    overflow-x: hidden;
-  }
-
-  :root:hover {
-    overflow-y: auto;
-  }
-
   ::-webkit-scrollbar {
     width: 4px;
     background-color: transparent;
