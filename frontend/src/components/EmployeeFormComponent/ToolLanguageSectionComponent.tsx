@@ -71,13 +71,13 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionId,
                             />
                           </Form.Item>
 
-                          <Space>
+                          <Space align="start">
                             <Form.Item
                               name={[name, 'from']}
                               rules={[{ required: true, message: 'Please input start time' }]}
                               className="mb-0"
                             >
-                              <DatePicker />
+                              <DatePicker picker="month" />
                             </Form.Item>
 
                             <Form.Item
@@ -85,7 +85,7 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionId,
                               rules={[{ required: true, message: 'Please input end time' }]}
                               className="mb-0"
                             >
-                              <DatePicker />
+                              <DatePicker picker="month" />
                             </Form.Item>
                           </Space>
                         </div>

@@ -7,7 +7,7 @@ import PositionSectionComponent from './PositionSectionComponent';
 import ToolLanguageSectionComponent from './ToolLanguageSectionComponent';
 
 interface EmployeeFormProps {
-  title: string;
+  type: 'Create' | 'Edit';
 }
 
 export interface EmployeeField {
@@ -15,7 +15,7 @@ export interface EmployeeField {
   positions: Position[];
 }
 
-const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ title }) => {
+const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
   const [form] = Form.useForm<EmployeeField>();
   const addPositionBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -31,7 +31,7 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ title }) => {
 
   return (
     <>
-      <Typography.Title level={2}>{title}</Typography.Title>
+      <Typography.Title level={2}>{`${type} employee profile`}</Typography.Title>
       <Form
         form={form}
         name="employee-form"
@@ -99,12 +99,17 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ title }) => {
             offset: 2,
           }}
         >
-          <div className="grid grid-cols-8 gap-2">
-            <Button type="primary" danger>
-              Delete
-            </Button>
-            <span className="col-span-5"></span>
-            <Button type="text">Cancel</Button>
+          <div className="grid grid-cols-8 gap-2 mt-32">
+            {type === 'Create' && <span style={{ gridColumn: 'span 7' }}></span>}
+            {type !== 'Create' && (
+              <>
+                <Button type="primary" danger>
+                  Delete
+                </Button>
+                <span style={{ gridColumn: 'span 5' }}></span>
+                <Button type="text">Cancel</Button>
+              </>
+            )}
             <Button type="primary" htmlType="submit" className="bg-green-600 hover:bg-green-500">
               Save
             </Button>
