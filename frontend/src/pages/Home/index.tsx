@@ -49,8 +49,8 @@ const HomePageComponent: React.FC = () => {
         </Link>
       </div>
 
-      <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-16">
-        {Array.from(Array(20).keys()).map((item) => (
+      <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-16 lg:gap-4 xl:gap-16 my-16">
+        {Array.from(Array(23).keys()).map((item) => (
           <li key={`porforlio-${item}`}>
             <EmployeeCardComponent />
           </li>

@@ -1,7 +1,9 @@
 import Position from '@/core/models/Position';
-import { Button, Form, FormListFieldData, FormListOperation, Select } from 'antd';
+import { Form, FormListFieldData, FormListOperation, Select } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React from 'react';
+import FormDeleteButtonComponent from './FormDeleteButtonComponent';
+import FormWrapperComponent from './FormWrapperComponent';
 
 interface PositionSectionProps {
   data: FormListFieldData;
@@ -12,8 +14,16 @@ interface PositionSectionProps {
 
 const PositionSectionComponent: React.FC<PositionSectionProps> = ({ data, action, showRemoveButton, options }) => {
   return (
-    <Form.Item label="Position" required labelCol={{ span: 2 }} labelAlign="left">
-      <div className="grid grid-cols-8 gap-2">
+    <Form.Item
+      label="Position"
+      required
+      labelCol={{
+        md: { span: 4 },
+        lg: { span: 3 },
+      }}
+      labelAlign="left"
+    >
+      <FormWrapperComponent className="gap-2">
         <Form.Item
           name={[data.name, 'name']}
           rules={[{ required: true, message: 'Please add position' }]}
@@ -31,14 +41,11 @@ const PositionSectionComponent: React.FC<PositionSectionProps> = ({ data, action
           />
         </Form.Item>
         {showRemoveButton && (
-          <Button
-            className="bg-neutral-600 hover:bg-neutral-500 hover:border-neutral-600 text-white"
-            onClick={() => action.remove(data.name)}
-          >
-            Remove position
-          </Button>
+          <FormDeleteButtonComponent onClick={() => action.remove(data.name)}>
+            Delete Position
+          </FormDeleteButtonComponent>
         )}
-      </div>
+      </FormWrapperComponent>
     </Form.Item>
   );
 };

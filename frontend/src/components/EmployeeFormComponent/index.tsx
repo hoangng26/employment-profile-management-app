@@ -3,6 +3,7 @@ import Position from '@/core/models/Position';
 import { Button, Form, FormProps, Input, Typography } from 'antd';
 import React, { useEffect, useRef } from 'react';
 import FormDividerComponent from './FormDividerComponent';
+import FormWrapperComponent from './FormWrapperComponent';
 import PositionSectionComponent from './PositionSectionComponent';
 import ToolLanguageSectionComponent from './ToolLanguageSectionComponent';
 
@@ -46,7 +47,10 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
         <Form.Item<EmployeeField>
           label="Name"
           name="name"
-          labelCol={{ span: 2 }}
+          labelCol={{
+            md: { span: 4 },
+            lg: { span: 3 },
+          }}
           labelAlign="left"
           rules={[
             {
@@ -55,9 +59,9 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
             },
           ]}
         >
-          <div className="grid grid-cols-8 mb-2">
+          <FormWrapperComponent className="mb-2">
             <Input className="col-span-7" />
-          </div>
+          </FormWrapperComponent>
         </Form.Item>
 
         <>
@@ -80,14 +84,24 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
 
                 <Form.Item
                   wrapperCol={{
-                    offset: 2,
+                    md: {
+                      offset: 4,
+                    },
+                    lg: {
+                      offset: 3,
+                    },
                   }}
                 >
-                  <div className="grid grid-cols-8 gap-2">
-                    <Button ref={addPositionBtnRef} type="primary" onClick={() => positionAction.add()}>
+                  <FormWrapperComponent>
+                    <Button
+                      ref={addPositionBtnRef}
+                      className="text-wrap text-sm md:text-base col-span-3 md:col-span-2"
+                      type="primary"
+                      onClick={() => positionAction.add()}
+                    >
                       Add position
                     </Button>
-                  </div>
+                  </FormWrapperComponent>
                 </Form.Item>
               </>
             )}
@@ -96,24 +110,35 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
 
         <Form.Item
           wrapperCol={{
-            offset: 2,
+            md: {
+              offset: 4,
+            },
+            lg: {
+              offset: 3,
+            },
           }}
         >
-          <div className="grid grid-cols-8 gap-2 mt-32">
-            {type === 'Create' && <span style={{ gridColumn: 'span 7' }}></span>}
+          <FormWrapperComponent className="gap-2 mt-32">
+            {type === 'Create' && <span className="col-span-6"></span>}
             {type !== 'Create' && (
               <>
-                <Button type="primary" danger>
+                <Button type="primary" className="col-span-3 md:col-span-2 text-sm md:text-base" danger>
                   Delete
                 </Button>
-                <span style={{ gridColumn: 'span 5' }}></span>
-                <Button type="text">Cancel</Button>
+                <span className="col-span-1 md:col-span-2"></span>
+                <Button type="text" className="col-span-2 text-sm md:text-base">
+                  Cancel
+                </Button>
               </>
             )}
-            <Button type="primary" htmlType="submit" className="bg-green-600 hover:bg-green-500">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="bg-green-600 hover:bg-green-500 col-span-2 text-sm md:text-base"
+            >
               Save
             </Button>
-          </div>
+          </FormWrapperComponent>
         </Form.Item>
       </Form>
     </>
