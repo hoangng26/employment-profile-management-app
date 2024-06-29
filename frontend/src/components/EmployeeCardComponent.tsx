@@ -1,9 +1,14 @@
+import { Employee } from '@/core/models/Employee';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Card, Image, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const EmployeeCardComponent: React.FC = () => {
+interface EmployeeCardComponentProps {
+  employee: Employee;
+}
+
+const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee }) => {
   const navigate = useNavigate();
 
   const editBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
@@ -29,7 +34,7 @@ const EmployeeCardComponent: React.FC = () => {
           loading="lazy"
           preview={false}
           alt="example"
-          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+          src={employee.avatarUrl}
         />
       }
       actions={[
@@ -41,7 +46,7 @@ const EmployeeCardComponent: React.FC = () => {
         title={
           <div className="">
             <span className="flex justify-between">
-              <span className="font-semibold">Nguyen Van A</span>
+              <span className="font-semibold">{employee.name}</span>
               <span className="font-medium">5 years</span>
             </span>
             <span>Frontend Developer</span>

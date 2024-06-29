@@ -1,15 +1,38 @@
 import EmployeeCardComponent from '@/components/EmployeeCardComponent';
-import { TEST_EVENT, useAppDispatch } from '@/core/redux/action';
+import { Employee } from '@/core/models/Employee';
+import { useAppState } from '@/core/redux/action';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Typography } from 'antd';
-import React, { useEffect } from 'react';
+import { SearchProps } from 'antd/es/input';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const HomePageComponent: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const { employees } = useAppState();
+  const [displayedEmployees, setDisplayedEmployees] = useState<Employee[]>([]);
+
+  const searchInputHandler: SearchProps['onSearch'] = (value, _event, info) => {
+    if (!info) {
+      return;
+    }
+
+    if (info.source === 'clear') {
+      setDisplayedEmployees(employees);
+      return;
+    } else if (value === '' && displayedEmployees.length === employees.length) {
+      return;
+    }
+    filterDisplayedEmployees(value);
+  };
+
+  const filterDisplayedEmployees = (value: string) => {
+    const filterEmployees = employees.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
+    setDisplayedEmployees(filterEmployees);
+  };
+
   useEffect(() => {
-    dispatch(TEST_EVENT());
-  }, [dispatch]);
+    setDisplayedEmployees(employees);
+  }, [employees]);
 
   return (
     <>
@@ -23,10 +46,10 @@ const HomePageComponent: React.FC = () => {
             allowClear
             enterButton={
               <Button type="primary">
-                <SearchOutlined className="md:hidden" />
                 <span className="hidden md:block">Search</span>
               </Button>
             }
+            onSearch={searchInputHandler}
           />
           <Input.Search
             className="md:hidden"
@@ -35,9 +58,9 @@ const HomePageComponent: React.FC = () => {
             enterButton={
               <Button type="primary">
                 <SearchOutlined className="md:hidden" />
-                <span className="hidden md:block">Search</span>
               </Button>
             }
+            onSearch={searchInputHandler}
           />
         </div>
         <span className="hidden md:block lg:col-span-3" />
@@ -50,9 +73,9 @@ const HomePageComponent: React.FC = () => {
       </div>
 
       <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-16 lg:gap-4 xl:gap-16 my-16">
-        {Array.from(Array(23).keys()).map((item) => (
-          <li key={`porforlio-${item}`}>
-            <EmployeeCardComponent />
+        {displayedEmployees.map((item) => (
+          <li key={`porforlio-${item.id}`}>
+            <EmployeeCardComponent employee={item} />
           </li>
         ))}
       </ul>
