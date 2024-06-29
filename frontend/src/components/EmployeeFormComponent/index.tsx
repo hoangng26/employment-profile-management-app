@@ -78,7 +78,7 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
                       showRemoveButton={positionsFields.length > 1}
                     />
 
-                    <ToolLanguageSectionComponent positionId={item.name} formInstance={form} />
+                    <ToolLanguageSectionComponent positionName={item.name} formInstance={form} />
                   </div>
                 ))}
 

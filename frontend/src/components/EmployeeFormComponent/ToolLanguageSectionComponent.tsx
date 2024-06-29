@@ -10,15 +10,15 @@ import FormDividerComponent from './FormDividerComponent';
 import FormWrapperComponent from './FormWrapperComponent';
 
 interface ToolLanguageProps {
-  positionId: number;
+  positionName: number;
   formInstance: FormInstance<EmployeeField>;
 }
 
-const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionId, formInstance }) => {
+const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionName, formInstance }) => {
   const positions = Form.useWatch('positions', formInstance);
   const isDisplay = useMemo(
-    () => Boolean(positions && positions[positionId] && positions[positionId].name),
-    [positionId, positions],
+    () => Boolean(positions && positions[positionName] && positions[positionName].name),
+    [positionName, positions],
   );
   const [options, setOptions] = useState<ToolLanguage[]>([]);
   const addBtnRef = useRef<HTMLButtonElement>(null);
@@ -32,10 +32,10 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionId,
 
   useEffect(() => {
     if (isDisplay) {
-      const findOption = positionData.find((item) => item.name === positions[positionId].name);
+      const findOption = positionData.find((item) => item.name === positions[positionName].name);
       setOptions(findOption!.toolLanguages);
     }
-  }, [isDisplay, positionId, positions]);
+  }, [isDisplay, positionName, positions]);
 
   useEffect(() => {
     addBtnRef.current?.click();
@@ -45,7 +45,7 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionId,
     <>
       {isDisplay && (
         <Form.Item name="toolLanguages">
-          <Form.List name={[positionId, 'toolLanguages']}>
+          <Form.List name={[positionName, 'toolLanguages']}>
             {(toolLangFields, toolLangAction) => (
               <>
                 {toolLangFields.map(({ key, name, ...restFields }) => (
@@ -84,18 +84,56 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionId,
                           <Space align="start" className="col-span-6 md:col-span-2 lg:col-span-2 xl:col-span-1">
                             <Form.Item
                               name={[name, 'from']}
-                              rules={[{ required: true, message: 'Please input start time' }]}
+                              dependencies={[['positions', positionName, 'toolLanguages', name, 'to']]}
+                              rules={[
+                                { required: true, message: 'Please input start time' },
+                                ({ getFieldValue }) => ({
+                                  validator(_rule, value) {
+                                    const toDateValue = getFieldValue([
+                                      'positions',
+                                      positionName,
+                                      'toolLanguages',
+                                      name,
+                                      'to',
+                                    ]);
+                                    if (!value || !toDateValue || value.isBefore(toDateValue)) {
+                                      return Promise.resolve();
+                                    }
+
+                                    return Promise.reject(new Error('Start date must be before end date'));
+                                  },
+                                }),
+                              ]}
                               className="mb-0"
                             >
-                              <DatePicker picker="month" placeholder="From" />
+                              <DatePicker picker="month" placeholder="From" needConfirm />
                             </Form.Item>
 
                             <Form.Item
                               name={[name, 'to']}
-                              rules={[{ required: true, message: 'Please input end time' }]}
+                              dependencies={[['positions', positionName, 'toolLanguages', name, 'from']]}
+                              rules={[
+                                { required: true, message: 'Please input end time' },
+                                ({ getFieldValue }) => ({
+                                  validator(_rule, value) {
+                                    const fromDateValue = getFieldValue([
+                                      'positions',
+                                      positionName,
+                                      'toolLanguages',
+                                      name,
+                                      'from',
+                                    ]);
+                                    if (!value || !fromDateValue || fromDateValue.isBefore(value)) {
+                                      return Promise.resolve();
+                                    }
+
+                                    return Promise.reject(new Error('End date must be behind start date'));
+                                  },
+                                }),
+                              ]}
                               className="mb-0"
                             >
-                              <DatePicker picker="month" placeholder="To" />
+                              <DatePicker picker="month" placeholder="To" needConfirm />
                             </Form.Item>
                           </Space>
                         </div>
