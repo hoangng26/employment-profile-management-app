@@ -2,9 +2,10 @@ import EmployeeCardComponent from '@/components/EmployeeCardComponent';
 import { Employee } from '@/core/models/Employee';
 import { useAppState } from '@/core/redux/action';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Typography } from 'antd';
+import { Button, Input, Skeleton, Typography } from 'antd';
 import { SearchProps } from 'antd/es/input';
 import React, { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { Link } from 'react-router-dom';
 
 const HomePageComponent: React.FC = () => {
@@ -17,7 +18,7 @@ const HomePageComponent: React.FC = () => {
     }
 
     if (info.source === 'clear') {
-      setDisplayedEmployees(employees);
+      initialDisplayEmployee();
       return;
     } else if (value === '' && displayedEmployees.length === employees.length) {
       return;
@@ -30,8 +31,20 @@ const HomePageComponent: React.FC = () => {
     setDisplayedEmployees(filterEmployees);
   };
 
+  const loadMoreEmployeeHandler = async () => {
+    if (displayedEmployees.length < employees.length) {
+      await setDisplayedEmployees((prevState) =>
+        prevState.concat(employees.slice(prevState.length, prevState.length + 4)),
+      );
+    }
+  };
+
+  const initialDisplayEmployee = () => {
+    setDisplayedEmployees(employees.slice(0, 12));
+  };
+
   useEffect(() => {
-    setDisplayedEmployees(employees);
+    initialDisplayEmployee();
   }, [employees]);
 
   return (
@@ -72,13 +85,20 @@ const HomePageComponent: React.FC = () => {
         </Link>
       </div>
 
-      <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-16 lg:gap-4 xl:gap-16 my-16">
-        {displayedEmployees.map((item) => (
-          <li key={`porforlio-${item.id}`}>
-            <EmployeeCardComponent employee={item} />
-          </li>
-        ))}
-      </ul>
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={loadMoreEmployeeHandler}
+        hasMore={displayedEmployees.length < employees.length}
+        loader={<Skeleton />}
+      >
+        <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-16 lg:gap-4 xl:gap-16 my-16">
+          {displayedEmployees.map((item) => (
+            <li key={`porforlio-${item.id}`}>
+              <EmployeeCardComponent employee={item} />
+            </li>
+          ))}
+        </ul>
+      </InfiniteScroll>
     </>
   );
 };
