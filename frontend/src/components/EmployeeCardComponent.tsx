@@ -1,6 +1,6 @@
 import { Employee } from '@/core/models/Employee';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Card, Image, Typography } from 'antd';
+import { Card, Image, Skeleton, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,10 +31,10 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
         <Image
           height={200}
           className="object-cover"
-          loading="lazy"
           preview={false}
-          alt="example"
+          alt={`${employee.id}-alt`}
           src={employee.avatarUrl}
+          placeholder={<Skeleton.Image className="w-full h-full object-cover" active />}
         />
       }
       actions={[

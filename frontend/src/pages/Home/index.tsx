@@ -89,15 +89,13 @@ const HomePageComponent: React.FC = () => {
         pageStart={0}
         loadMore={loadMoreEmployeeHandler}
         hasMore={displayedEmployees.length < employees.length}
-        loader={<Skeleton />}
+        loader={<Skeleton key="loading-key" />}
       >
-        <ul className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-16 lg:gap-4 xl:gap-16 my-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-16 lg:gap-4 xl:gap-16 my-16">
           {displayedEmployees.map((item) => (
-            <li key={`porforlio-${item.id}`}>
-              <EmployeeCardComponent employee={item} />
-            </li>
+            <EmployeeCardComponent key={`portfolio-${item.id}`} employee={item} />
           ))}
-        </ul>
+        </div>
       </InfiniteScroll>
     </>
   );
