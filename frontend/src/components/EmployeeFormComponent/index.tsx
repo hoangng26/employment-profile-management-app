@@ -1,7 +1,7 @@
 import { positionData } from '@/core/constants/Position';
 import Position from '@/core/models/Position';
 import { Button, Form, FormProps, Input, Typography } from 'antd';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FormDividerComponent from './FormDividerComponent';
 import FormWrapperComponent from './FormWrapperComponent';
 import PositionSectionComponent from './PositionSectionComponent';
@@ -18,7 +18,13 @@ export interface EmployeeField {
 
 const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
   const [form] = Form.useForm<EmployeeField>();
+  const positionsValue = Form.useWatch('positions', form);
   const addPositionBtnRef = useRef<HTMLButtonElement>(null);
+  const [displayedPosition, setDisplayedPosition] = useState(positionData);
+
+  const formSubmitHandler: FormProps<EmployeeField>['onFinish'] = (values) => {
+    console.log(values);
+  };
 
   useEffect(() => {
     if (addPositionBtnRef.current) {
@@ -26,9 +32,15 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
     }
   }, []);
 
-  const formSubmitHandler: FormProps<EmployeeField>['onFinish'] = (values) => {
-    console.log(values);
-  };
+  useEffect(() => {
+    if (!positionsValue || !positionsValue[0]) {
+      return;
+    }
+    const isInSelectedPositions = (name: string) => positionsValue.find((item) => item && item.name === name);
+
+    const filteredDisplayedPosition = positionData.filter((item) => !isInSelectedPositions(item.name));
+    setDisplayedPosition(filteredDisplayedPosition);
+  }, [positionsValue]);
 
   return (
     <>
@@ -73,7 +85,7 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type }) => {
                     {Boolean(item.name) && <FormDividerComponent />}
                     <PositionSectionComponent
                       data={item}
-                      options={positionData}
+                      options={displayedPosition}
                       action={positionAction}
                       showRemoveButton={positionsFields.length > 1}
                     />
