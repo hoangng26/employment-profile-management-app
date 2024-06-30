@@ -36,16 +36,12 @@ export class ToolLanguage extends Model<ToolLanguage> {
     type: DataType.DATE,
     allowNull: false,
   })
-  to: number;
+  to: string;
 
   @Column({
     type: DataType.TEXT,
-    allowNull: false,
   })
   description: string;
-
-  @BelongsTo(() => ToolLanguageResource)
-  employee: ToolLanguageResource;
 
   @BelongsTo(() => Position)
   positionResource: Position;

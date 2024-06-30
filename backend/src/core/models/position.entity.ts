@@ -28,7 +28,4 @@ export class Position extends Model<Position> {
 
   @BelongsTo(() => Employee)
   employee: Employee;
-
-  @BelongsTo(() => PositionResource)
-  positionResource: PositionResource;
 }
