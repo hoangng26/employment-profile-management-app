@@ -9,7 +9,6 @@ const CustomCarousel: React.FC<PropsWithChildren> = ({ children }) => {
     draggable: true,
     swipe: true,
     dots: false,
-    fade: true,
   };
 
   return <Carousel {...setting}>{children}</Carousel>;

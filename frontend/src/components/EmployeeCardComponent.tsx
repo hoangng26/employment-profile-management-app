@@ -1,9 +1,8 @@
-import { fallbackImgUrl } from '@/core/constants/fallback';
 import { Employee } from '@/core/models/Employee';
 import { useAppState } from '@/core/redux/action';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Card, Image, Skeleton, Typography } from 'antd';
-import React from 'react';
+import { Avatar, Card, Image, Skeleton, Typography } from 'antd';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomCarousel from './CustomCarousel';
 
@@ -14,6 +13,7 @@ interface EmployeeCardComponentProps {
 const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee }) => {
   const { photos } = useAppState();
   const navigate = useNavigate();
+  const employeePhotos = useMemo(() => photos.filter((item) => item.userId === employee.id), [photos, employee]);
 
   const editBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
     event.stopPropagation();
@@ -25,10 +25,6 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
     console.log('Deleted');
   };
 
-  const randomNumber = (max: number) => {
-    return Math.floor(Math.random() * max);
-  };
-
   return (
     <Card
       style={{ width: 300 }}
@@ -37,17 +33,15 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
       className="mx-auto"
       cover={
         <CustomCarousel>
-          {Array.from(Array(4).keys()).map((_, index) => (
+          {employeePhotos.map((item) => (
             <Image
-              key={`${employee.id}-img-${index}`}
-              height={300}
+              key={`${employee.id}-img-${item.id}`}
+              height={200}
               width={300}
               className="object-cover"
               preview={false}
-              alt={`${employee.id}-alt`}
-              src={
-                photos[randomNumber(photos.length - 1)] ? photos[randomNumber(photos.length - 1)].url : fallbackImgUrl
-              }
+              alt={`${employee.id}-${item.id}-alt`}
+              src={item.url}
               placeholder={<Skeleton.Image className="w-full h-full object-cover" active />}
             />
           ))}
@@ -61,13 +55,14 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
       <Card.Meta
         title={
           <div className="">
-            <span className="flex justify-between">
+            <span className="flex justify-between items-center">
               <span className="font-semibold">{employee.name}</span>
-              <span className="font-medium">5 years</span>
+              <span className="font-medium text-xs">5 yrs</span>
             </span>
             <span>Frontend Developer</span>
           </div>
         }
+        avatar={<Avatar src={employee.avatarUrl} alt={`${employee.id}-avt`} />}
         description={
           <Typography.Paragraph ellipsis={{ rows: 2 }} className="text-inherit">
             This is the description lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur ad optio cum.

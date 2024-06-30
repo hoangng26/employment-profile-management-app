@@ -11,18 +11,23 @@ import { Link } from 'react-router-dom';
 const HomePageComponent: React.FC = () => {
   const { employees } = useAppState();
   const [displayedEmployees, setDisplayedEmployees] = useState<Employee[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const searchInputHandler: SearchProps['onSearch'] = (value, _event, info) => {
     if (!info) {
+      setIsSearching(false);
       return;
     }
 
     if (info.source === 'clear') {
       initialDisplayEmployee();
+      setIsSearching(false);
       return;
     } else if (value === '' && displayedEmployees.length === employees.length) {
+      setIsSearching(false);
       return;
     }
+    setIsSearching(true);
     filterDisplayedEmployees(value);
   };
 
@@ -31,11 +36,9 @@ const HomePageComponent: React.FC = () => {
     setDisplayedEmployees(filterEmployees);
   };
 
-  const loadMoreEmployeeHandler = async () => {
+  const loadMoreEmployeeHandler = () => {
     if (displayedEmployees.length < employees.length) {
-      await setDisplayedEmployees((prevState) =>
-        prevState.concat(employees.slice(prevState.length, prevState.length + 4)),
-      );
+      setDisplayedEmployees((prevState) => prevState.concat(employees.slice(prevState.length, prevState.length + 4)));
     }
   };
 
@@ -88,7 +91,7 @@ const HomePageComponent: React.FC = () => {
       <InfiniteScroll
         pageStart={0}
         loadMore={loadMoreEmployeeHandler}
-        hasMore={displayedEmployees.length < employees.length}
+        hasMore={displayedEmployees.length < employees.length && !isSearching}
         loader={<Skeleton key="loading-key" />}
       >
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-16 lg:gap-4 xl:gap-16 my-16">
