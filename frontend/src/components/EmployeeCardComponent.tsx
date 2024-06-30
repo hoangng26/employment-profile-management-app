@@ -18,7 +18,7 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
 
   const editBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
     event.stopPropagation();
-    navigate('/edit');
+    navigate(`/edit/${employee.id}`);
   };
 
   const deleteBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {

@@ -4,4 +4,5 @@ export const initialAppState: AppState = {
   employees: [],
   photos: [],
   loading: false,
+  positionResource: [],
 };

@@ -1,3 +1,9 @@
 export default interface ToolLanguage {
-  name: string;
+  id: number;
+  toolLanguageResourceId: number;
+  positionId: number;
+  displayOrder: number;
+  from: string;
+  to: string;
+  description: string;
 }

@@ -1,27 +1,29 @@
-import { positionData } from '@/core/constants/Position';
-import ToolLanguage from '@/core/models/ToolLanguage';
+import ToolLanguageResource from '@/core/models/ToolLanguageResource';
+import { useAppState } from '@/core/redux/action';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Form, FormInstance, Input, Select, Space, theme, Upload } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { EmployeeField } from '.';
+import { EmployeeFormField } from '.';
 import FormDeleteButtonComponent from './FormDeleteButtonComponent';
 import FormDividerComponent from './FormDividerComponent';
 import FormWrapperComponent from './FormWrapperComponent';
 
 interface ToolLanguageProps {
   positionName: number;
-  formInstance: FormInstance<EmployeeField>;
+  formInstance: FormInstance<EmployeeFormField>;
 }
 
 const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionName, formInstance }) => {
+  const { positionResource } = useAppState();
   const positions = Form.useWatch('positions', formInstance);
+  const [options, setOptions] = useState<ToolLanguageResource[]>([]);
+  const addBtnRef = useRef<HTMLButtonElement>(null);
+
   const isDisplay = useMemo(
-    () => Boolean(positions && positions[positionName] && positions[positionName].name),
+    () => Boolean(positions && positions[positionName] && positions[positionName].id),
     [positionName, positions],
   );
-  const [options, setOptions] = useState<ToolLanguage[]>([]);
-  const addBtnRef = useRef<HTMLButtonElement>(null);
 
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
@@ -31,15 +33,11 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionNam
   };
 
   useEffect(() => {
-    if (isDisplay) {
-      const findOption = positionData.find((item) => item.name === positions[positionName].name);
-      setOptions(findOption!.toolLanguages);
+    if (isDisplay && positionResource.length) {
+      const findOption = positionResource.find((item) => item.id === positions[positionName].id);
+      setOptions(findOption!.toolLanguageResources);
     }
-  }, [isDisplay, positionName, positions]);
-
-  useEffect(() => {
-    addBtnRef.current?.click();
-  }, [isDisplay]);
+  }, [isDisplay, positionName, positions, positionResource]);
 
   return (
     <>
@@ -52,20 +50,21 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionNam
                   <div key={key}>
                     {Boolean(name) && <FormDividerComponent style={{ borderTopStyle: 'dotted', marginBottom: 0 }} />}
 
-                    <Form.Item
-                      label="Tool/Language"
-                      required
-                      labelCol={{
-                        md: { span: 4 },
-                        lg: { span: 3 },
-                      }}
-                      labelAlign="left"
-                    >
-                      <FormWrapperComponent className="gap-2">
+                    <FormWrapperComponent className="gap-2">
+                      <Form.Item
+                        label="Tool/Language"
+                        required
+                        labelCol={{
+                          md: { span: 5 },
+                          lg: { span: 4 },
+                        }}
+                        labelAlign="left"
+                        className="col-span-7"
+                      >
                         <div className="col-span-7 grid grid-cols-6 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-4 gap-2">
                           <Form.Item
                             {...restFields}
-                            name={[name, 'name']}
+                            name={[name, 'id']}
                             rules={[{ required: true, message: 'Please add tool/language' }]}
                             className="mb-0 col-span-6 md:col-span-2 lg:col-span-3"
                           >
@@ -74,7 +73,7 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionNam
                               placeholder="Select a tool/language"
                               options={options.map(
                                 (item): DefaultOptionType => ({
-                                  value: item.name,
+                                  value: item.id,
                                   label: item.name,
                                 }),
                               )}
@@ -137,69 +136,73 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionNam
                             </Form.Item>
                           </Space>
                         </div>
+                      </Form.Item>
+                      {toolLangFields.length > 1 && (
+                        <FormDeleteButtonComponent onClick={() => toolLangAction.remove(name)}>
+                          Delete Tool/Language
+                        </FormDeleteButtonComponent>
+                      )}
+                    </FormWrapperComponent>
 
-                        {toolLangFields.length > 1 && (
-                          <FormDeleteButtonComponent onClick={() => toolLangAction.remove(name)}>
-                            Delete Tool/Language
-                          </FormDeleteButtonComponent>
-                        )}
-                      </FormWrapperComponent>
-                    </Form.Item>
-
-                    <Form.Item
-                      wrapperCol={{
-                        md: {
-                          offset: 4,
-                        },
-                        lg: {
-                          offset: 3,
-                        },
-                      }}
-                      name={[name, 'description']}
-                    >
-                      <FormWrapperComponent>
+                    <FormWrapperComponent>
+                      <Form.Item
+                        wrapperCol={{
+                          md: {
+                            offset: 5,
+                          },
+                          lg: {
+                            offset: 4,
+                          },
+                        }}
+                        name={[name, 'description']}
+                        className="col-span-7"
+                      >
                         <Input.TextArea
                           className="col-span-7"
                           placeholder="Please input this position description"
                           autoSize={{ minRows: 6 }}
                         />
-                      </FormWrapperComponent>
-                    </Form.Item>
+                      </Form.Item>
+                    </FormWrapperComponent>
 
-                    <Form.Item
-                      wrapperCol={{
-                        md: {
-                          offset: 4,
-                        },
-                        lg: {
-                          offset: 3,
-                        },
-                      }}
-                      valuePropName="fileList"
-                      getValueFromEvent={normFile}
-                    >
-                      <Upload listType="picture-card">
-                        <button style={{ border: 0, background: 'none' }} type="button">
-                          <PlusOutlined />
-                          <div style={{ marginTop: 8 }}>Upload</div>
-                        </button>
-                      </Upload>
-                    </Form.Item>
+                    <FormWrapperComponent>
+                      <Form.Item
+                        wrapperCol={{
+                          md: {
+                            offset: 5,
+                          },
+                          lg: {
+                            offset: 4,
+                          },
+                        }}
+                        className="col-span-7"
+                        // name={[name, 'images']}
+                        valuePropName="fileList"
+                        getValueFromEvent={normFile}
+                      >
+                        <Upload listType="picture-card">
+                          <button style={{ border: 0, background: 'none' }} type="button">
+                            <PlusOutlined />
+                            <div style={{ marginTop: 8 }}>Upload</div>
+                          </button>
+                        </Upload>
+                      </Form.Item>
+                    </FormWrapperComponent>
                   </div>
                 ))}
 
-                <Form.Item
-                  className="mb-0"
-                  wrapperCol={{
-                    md: {
-                      offset: 4,
-                    },
-                    lg: {
-                      offset: 3,
-                    },
-                  }}
-                >
-                  <FormWrapperComponent>
+                <FormWrapperComponent>
+                  <Form.Item
+                    className="mb-0 col-span-7"
+                    wrapperCol={{
+                      md: {
+                        offset: 5,
+                      },
+                      lg: {
+                        offset: 4,
+                      },
+                    }}
+                  >
                     <Button
                       ref={addBtnRef}
                       style={{
@@ -211,8 +214,8 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionNam
                     >
                       Add Tool/Language
                     </Button>
-                  </FormWrapperComponent>
-                </Form.Item>
+                  </Form.Item>
+                </FormWrapperComponent>
               </>
             )}
           </Form.List>

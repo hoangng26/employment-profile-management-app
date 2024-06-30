@@ -36,7 +36,16 @@ export class PositionService {
       attributes: {
         exclude: excludeCRUDDateAttribute,
       },
-      include: [ToolLanguageResource],
+      include: [
+        {
+          model: ToolLanguageResource,
+          attributes: {
+            exclude: excludeCRUDDateAttribute,
+          },
+          separate: true,
+          order: ['id'],
+        },
+      ],
     });
   }
 }

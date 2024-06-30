@@ -8,20 +8,21 @@ export type FormDividerProps = {
 
 const FormDividerComponent: React.FC<FormDividerProps> = ({ style }) => {
   return (
-    <Form.Item
-      wrapperCol={{
-        md: {
-          offset: 4,
-        },
-        lg: {
-          offset: 3,
-        },
-      }}
-    >
-      <FormWrapperComponent>
+    <FormWrapperComponent>
+      <Form.Item
+        wrapperCol={{
+          md: {
+            offset: 4,
+          },
+          lg: {
+            offset: 4,
+          },
+        }}
+        className="col-span-7"
+      >
         <Divider className="border-t-neutral-300 border-t-2 col-span-7 m-0" style={style} />
-      </FormWrapperComponent>
-    </Form.Item>
+      </Form.Item>
+    </FormWrapperComponent>
   );
 };
 

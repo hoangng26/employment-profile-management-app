@@ -1,6 +1,9 @@
 import ToolLanguage from './ToolLanguage';
 
 export default interface Position {
-  name: string;
+  id: number;
+  employeeId: number;
+  positionResourceId: number;
+  displayOrder: number;
   toolLanguages: ToolLanguage[];
 }
