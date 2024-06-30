@@ -1,8 +1,9 @@
 import { Employee } from '@/core/models/Employee';
-import { useAppState } from '@/core/redux/action';
+import TLImage from '@/core/models/TLImage';
+import { employeeService } from '@/core/services/EmployeeService';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Avatar, Card, Image, Skeleton, Typography } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomCarousel from './CustomCarousel';
 
@@ -11,9 +12,9 @@ interface EmployeeCardComponentProps {
 }
 
 const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee }) => {
-  const { photos } = useAppState();
+  const [photos, setPhotos] = useState<TLImage[]>([]);
   const navigate = useNavigate();
-  const employeePhotos = useMemo(() => photos.filter((item) => item.userId === employee.id), [photos, employee]);
+  const employeePhotos = useMemo(() => photos, [photos, employee]);
 
   const editBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
     event.stopPropagation();
@@ -24,6 +25,21 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
     event.stopPropagation();
     console.log('Deleted');
   };
+
+  useEffect(() => {
+    function getAllEmployeeImage(positions: any) {
+      return positions.flatMap((item: any) => item.toolLanguages).flatMap((item: any) => item.images);
+    }
+
+    async function getEmployee() {
+      const { data } = await employeeService.getEmployee(employee.id);
+      const { positions } = data;
+      const images = getAllEmployeeImage(positions);
+      setPhotos(images);
+    }
+
+    getEmployee();
+  }, []);
 
   return (
     <Card
@@ -41,7 +57,7 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
               className="object-cover"
               preview={false}
               alt={`${employee.id}-${item.id}-alt`}
-              src={item.url}
+              src={item.cdnUrl}
               placeholder={<Skeleton.Image className="w-full h-full object-cover" active />}
             />
           ))}

@@ -1,4 +1,4 @@
-import { FETCH_EMPLOYEES, FETCH_PHOTOS, useAppDispatch } from '@/core/redux/action';
+import { FETCH_EMPLOYEES, useAppDispatch } from '@/core/redux/action';
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -7,7 +7,6 @@ const MainLayoutComponent: React.FC = () => {
 
   useEffect(() => {
     dispatch(FETCH_EMPLOYEES());
-    dispatch(FETCH_PHOTOS());
   }, []);
 
   return (

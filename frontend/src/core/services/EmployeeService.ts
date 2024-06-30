@@ -7,8 +7,8 @@ class EmployeeService {
     return await axios.get(url);
   }
 
-  async getAllPhotos(): Promise<AxiosResponse> {
-    const url = `${apiService.apiEndpoint}${apiService.apiPhotos}`;
+  async getEmployee(id: number): Promise<AxiosResponse> {
+    const url = `${apiService.apiEndpoint}${apiService.apiEmployees}/${id}`;
     return await axios.get(url);
   }
 }

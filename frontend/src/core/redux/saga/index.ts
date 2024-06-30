@@ -1,13 +1,12 @@
 import createSagaMiddleware from 'redux-saga';
 import { all, takeLeading } from 'redux-saga/effects';
-import { FETCH_EMPLOYEES, FETCH_PHOTOS } from '../action';
-import { fetchEmployeesSaga, fetchPhotosSaga } from './action';
+import { FETCH_EMPLOYEES } from '../action';
+import { fetchEmployeesSaga } from './action';
 
 export const sagaMiddleware = createSagaMiddleware();
 
 export function* employeesSaga() {
   yield takeLeading(FETCH_EMPLOYEES, fetchEmployeesSaga);
-  yield takeLeading(FETCH_PHOTOS, fetchPhotosSaga);
 }
 
 export function* helloSaga() {
