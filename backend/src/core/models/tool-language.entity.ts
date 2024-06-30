@@ -1,5 +1,6 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
 import { Position } from './position.entity';
+import { ToolLanguageImage } from './tool-language-image.entity';
 import { ToolLanguageResource } from './tool-language-resource.entity';
 
 @Table({
@@ -42,6 +43,9 @@ export class ToolLanguage extends Model<ToolLanguage> {
     type: DataType.TEXT,
   })
   description: string;
+
+  @HasMany(() => ToolLanguageImage)
+  images: ToolLanguageImage[];
 
   @BelongsTo(() => Position)
   positionResource: Position;

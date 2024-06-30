@@ -1,18 +1,13 @@
 const initialPositions = [
   {
     employeeId: 1,
-    positionResourceId: 2,
+    positionResourceId: 3,
     displayOrder: 1,
   },
   {
     employeeId: 1,
     positionResourceId: 1,
     displayOrder: 2,
-  },
-  {
-    employeeId: 1,
-    positionResourceId: 3,
-    displayOrder: 3,
   },
   {
     employeeId: 2,
@@ -20,44 +15,44 @@ const initialPositions = [
     displayOrder: 1,
   },
   {
-    employeeId: 3,
+    employeeId: 2,
     positionResourceId: 1,
+    displayOrder: 2,
+  },
+  {
+    employeeId: 2,
+    positionResourceId: 3,
+    displayOrder: 3,
+  },
+  {
+    employeeId: 3,
+    positionResourceId: 2,
     displayOrder: 1,
   },
   {
     employeeId: 4,
-    positionResourceId: 3,
+    positionResourceId: 2,
     displayOrder: 1,
   },
   {
-    employeeId: 5,
-    positionResourceId: 3,
-    displayOrder: 1,
-  },
-  {
-    employeeId: 5,
+    employeeId: 4,
     positionResourceId: 1,
     displayOrder: 2,
   },
   {
     employeeId: 5,
+    positionResourceId: 3,
+    displayOrder: 1,
+  },
+  {
+    employeeId: 5,
     positionResourceId: 2,
-    displayOrder: 3,
+    displayOrder: 2,
   },
   {
     employeeId: 6,
     positionResourceId: 2,
     displayOrder: 1,
-  },
-  {
-    employeeId: 6,
-    positionResourceId: 1,
-    displayOrder: 2,
-  },
-  {
-    employeeId: 6,
-    positionResourceId: 3,
-    displayOrder: 3,
   },
   {
     employeeId: 7,
@@ -65,13 +60,28 @@ const initialPositions = [
     displayOrder: 1,
   },
   {
+    employeeId: 7,
+    positionResourceId: 3,
+    displayOrder: 2,
+  },
+  {
+    employeeId: 7,
+    positionResourceId: 1,
+    displayOrder: 3,
+  },
+  {
     employeeId: 8,
     positionResourceId: 1,
     displayOrder: 1,
   },
   {
+    employeeId: 8,
+    positionResourceId: 2,
+    displayOrder: 2,
+  },
+  {
     employeeId: 9,
-    positionResourceId: 3,
+    positionResourceId: 1,
     displayOrder: 1,
   },
   {
@@ -81,47 +91,27 @@ const initialPositions = [
   },
   {
     employeeId: 10,
-    positionResourceId: 1,
+    positionResourceId: 3,
     displayOrder: 2,
   },
   {
     employeeId: 11,
-    positionResourceId: 1,
-    displayOrder: 1,
-  },
-  {
-    employeeId: 12,
-    positionResourceId: 1,
-    displayOrder: 1,
-  },
-  {
-    employeeId: 12,
-    positionResourceId: 3,
-    displayOrder: 2,
-  },
-  {
-    employeeId: 12,
-    positionResourceId: 2,
-    displayOrder: 3,
-  },
-  {
-    employeeId: 13,
     positionResourceId: 3,
     displayOrder: 1,
   },
   {
-    employeeId: 13,
-    positionResourceId: 1,
-    displayOrder: 2,
+    employeeId: 12,
+    positionResourceId: 2,
+    displayOrder: 1,
   },
   {
     employeeId: 13,
-    positionResourceId: 2,
-    displayOrder: 3,
+    positionResourceId: 1,
+    displayOrder: 1,
   },
   {
     employeeId: 14,
-    positionResourceId: 2,
+    positionResourceId: 1,
     displayOrder: 1,
   },
   {
@@ -131,38 +121,38 @@ const initialPositions = [
   },
   {
     employeeId: 15,
-    positionResourceId: 3,
-    displayOrder: 2,
-  },
-  {
-    employeeId: 16,
-    positionResourceId: 2,
-    displayOrder: 1,
-  },
-  {
-    employeeId: 16,
     positionResourceId: 1,
     displayOrder: 2,
   },
   {
     employeeId: 16,
-    positionResourceId: 3,
-    displayOrder: 3,
+    positionResourceId: 2,
+    displayOrder: 1,
+  },
+  {
+    employeeId: 17,
+    positionResourceId: 2,
+    displayOrder: 1,
   },
   {
     employeeId: 17,
     positionResourceId: 1,
-    displayOrder: 1,
+    displayOrder: 2,
   },
   {
     employeeId: 18,
-    positionResourceId: 1,
+    positionResourceId: 3,
     displayOrder: 1,
   },
   {
     employeeId: 18,
     positionResourceId: 2,
     displayOrder: 2,
+  },
+  {
+    employeeId: 18,
+    positionResourceId: 1,
+    displayOrder: 3,
   },
   {
     employeeId: 19,
@@ -176,33 +166,43 @@ const initialPositions = [
   },
   {
     employeeId: 20,
-    positionResourceId: 1,
+    positionResourceId: 3,
     displayOrder: 1,
   },
   {
     employeeId: 20,
+    positionResourceId: 1,
+    displayOrder: 2,
+  },
+  {
+    employeeId: 21,
     positionResourceId: 2,
+    displayOrder: 1,
+  },
+  {
+    employeeId: 21,
+    positionResourceId: 1,
     displayOrder: 2,
   },
   {
     employeeId: 21,
     positionResourceId: 3,
-    displayOrder: 1,
-  },
-  {
-    employeeId: 21,
-    positionResourceId: 2,
-    displayOrder: 2,
+    displayOrder: 3,
   },
   {
     employeeId: 22,
     positionResourceId: 2,
     displayOrder: 1,
+  },
+  {
+    employeeId: 22,
+    positionResourceId: 3,
+    displayOrder: 2,
   },
   {
     employeeId: 22,
     positionResourceId: 1,
-    displayOrder: 2,
+    displayOrder: 3,
   },
   {
     employeeId: 23,
@@ -215,38 +215,28 @@ const initialPositions = [
     displayOrder: 1,
   },
   {
-    employeeId: 24,
-    positionResourceId: 1,
-    displayOrder: 2,
-  },
-  {
     employeeId: 25,
-    positionResourceId: 2,
+    positionResourceId: 1,
     displayOrder: 1,
   },
   {
     employeeId: 25,
-    positionResourceId: 1,
-    displayOrder: 2,
-  },
-  {
-    employeeId: 26,
-    positionResourceId: 2,
-    displayOrder: 1,
-  },
-  {
-    employeeId: 26,
-    positionResourceId: 1,
+    positionResourceId: 3,
     displayOrder: 2,
   },
   {
     employeeId: 26,
     positionResourceId: 3,
-    displayOrder: 3,
+    displayOrder: 1,
+  },
+  {
+    employeeId: 26,
+    positionResourceId: 2,
+    displayOrder: 2,
   },
   {
     employeeId: 27,
-    positionResourceId: 1,
+    positionResourceId: 2,
     displayOrder: 1,
   },
   {
@@ -256,7 +246,7 @@ const initialPositions = [
   },
   {
     employeeId: 28,
-    positionResourceId: 2,
+    positionResourceId: 3,
     displayOrder: 1,
   },
   {
@@ -266,18 +256,33 @@ const initialPositions = [
   },
   {
     employeeId: 29,
-    positionResourceId: 3,
+    positionResourceId: 1,
     displayOrder: 1,
   },
   {
-    employeeId: 30,
+    employeeId: 29,
     positionResourceId: 3,
-    displayOrder: 1,
+    displayOrder: 2,
+  },
+  {
+    employeeId: 29,
+    positionResourceId: 2,
+    displayOrder: 3,
   },
   {
     employeeId: 30,
     positionResourceId: 1,
+    displayOrder: 1,
+  },
+  {
+    employeeId: 30,
+    positionResourceId: 2,
     displayOrder: 2,
+  },
+  {
+    employeeId: 30,
+    positionResourceId: 3,
+    displayOrder: 3,
   },
 ];
 
