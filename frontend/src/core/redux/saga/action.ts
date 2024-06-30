@@ -13,6 +13,7 @@ export function* fetchEmployeesSaga() {
       id,
       name,
       avatarUrl,
+      positions: [],
     }),
   );
 

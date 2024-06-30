@@ -1,7 +1,7 @@
 export default interface ToolLanguage {
-  id: number;
+  id?: number;
   toolLanguageResourceId: number;
-  positionId: number;
+  positionId?: number;
   displayOrder: number;
   from: string;
   to: string;

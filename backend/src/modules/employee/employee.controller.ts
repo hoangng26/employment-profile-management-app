@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { UpdateEmployeeDto } from 'src/core/dtos/employee.dto';
-import { Employee } from 'src/core/models/employee.entity';
+import { CreateEmployeeDto, UpdateEmployeeDto } from 'src/core/dtos/employee.dto';
 import { EmployeeService } from './employee.service';
 
 @Controller('employee')
@@ -8,8 +7,9 @@ export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
   @Post()
-  create(@Body() createEmployeeDto: Employee) {
-    return this.employeeService.create(createEmployeeDto);
+  async create(@Body() createEmployeeDto: CreateEmployeeDto) {
+    const employee = await this.employeeService.create(createEmployeeDto);
+    return employee;
   }
 
   @Get()
@@ -23,8 +23,8 @@ export class EmployeeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
-    return this.employeeService.update(+id, updateEmployeeDto);
+  async update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
+    return await this.employeeService.update(+id, updateEmployeeDto);
   }
 
   @Delete(':id')

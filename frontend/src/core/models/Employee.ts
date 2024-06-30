@@ -1,8 +1,8 @@
 import Position from './Position';
 
 export interface Employee {
-  id: number;
+  id?: number;
   name: string;
-  avatarUrl: string;
+  avatarUrl?: string;
   positions: Position[];
 }

@@ -31,6 +31,13 @@ const HomePageComponent: React.FC = () => {
     filterDisplayedEmployees(value);
   };
 
+  const searchChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (!event.target.value && isSearching === true && displayedEmployees.length < employees.length) {
+      setIsSearching(false);
+      initialDisplayEmployee();
+    }
+  };
+
   const filterDisplayedEmployees = (value: string) => {
     const filterEmployees = employees.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
     setDisplayedEmployees(filterEmployees);
@@ -66,6 +73,7 @@ const HomePageComponent: React.FC = () => {
               </Button>
             }
             onSearch={searchInputHandler}
+            onChange={searchChangeHandler}
           />
           <Input.Search
             className="md:hidden"
@@ -77,6 +85,7 @@ const HomePageComponent: React.FC = () => {
               </Button>
             }
             onSearch={searchInputHandler}
+            onChange={searchChangeHandler}
           />
         </div>
         <span className="hidden md:block lg:col-span-3" />

@@ -2,20 +2,35 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { EMPLOYEE_REPOSITORY, excludeCRUDDateAttribute } from 'src/core/constants';
 import { employeeIncludeAttributes } from 'src/core/constants/queryAttributes';
-import { EmployeeDto, UpdateEmployeeDto } from 'src/core/dtos/employee.dto';
+import { CreateEmployeeDto, UpdateEmployeeDto } from 'src/core/dtos/employee.dto';
 import { Employee } from 'src/core/models/employee.entity';
+import { PositionService } from '../position/position.service';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     @Inject(EMPLOYEE_REPOSITORY)
     private readonly employeeRepository: typeof Employee,
+    private readonly positionService: PositionService,
   ) {}
 
-  async create(userDto: EmployeeDto): Promise<Employee> {
-    return await this.employeeRepository.create<Employee>(userDto, {
+  async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
+    const { positions, ...employeeDto } = createEmployeeDto;
+
+    const employee = await this.employeeRepository.create<Employee>(employeeDto, {
       returning: true,
     });
+
+    await Promise.all(
+      positions.map((item) =>
+        this.positionService.create({
+          ...item,
+          employeeId: employee.id,
+        }),
+      ),
+    );
+
+    return employee;
   }
 
   async findAll(): Promise<Employee[]> {
@@ -53,9 +68,17 @@ export class EmployeeService {
     });
   }
 
-  update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
-    updateEmployeeDto;
-    return `This action updates a #${id} user`;
+  async update(id: number, updateEmployeeDto: UpdateEmployeeDto): Promise<Employee> {
+    const { positions, ...employeeDto } = updateEmployeeDto;
+
+    await Promise.all(positions.map((item) => this.positionService.update(item.id, item)));
+
+    return await this.employeeRepository.update<Employee>(employeeDto, {
+      where: {
+        id,
+      },
+      returning: true,
+    })[0];
   }
 
   remove(id: number) {

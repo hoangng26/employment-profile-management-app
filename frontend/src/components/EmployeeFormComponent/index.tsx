@@ -1,7 +1,8 @@
 import { Employee } from '@/core/models/Employee';
 import PositionResource from '@/core/models/PositionResource';
 import { FETCH_POSITION_RESOURCE, useAppDispatch, useAppState } from '@/core/redux/action';
-import { parseEmployeeToFormData } from '@/core/utils/EmployeeForm';
+import { employeeService } from '@/core/services/EmployeeService';
+import { EF } from '@/core/utils/EmployeeForm';
 import { Button, Form, FormProps, Input, Typography } from 'antd';
 import { Dayjs } from 'dayjs';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -17,10 +18,11 @@ interface EmployeeFormProps {
 }
 
 export interface EmployeeFormField {
+  id?: number;
   name: string;
   positions: {
     id?: number;
-    toolLanguages?: {
+    toolLanguages: {
       id?: number;
       from: Dayjs;
       to: Dayjs;
@@ -38,23 +40,37 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type, employee }) 
   const positionsValue = Form.useWatch('positions', form);
   const addPositionBtnRef = useRef<HTMLButtonElement>(null);
   const [displayedPosition, setDisplayedPosition] = useState<PositionResource[]>([]);
+  const [isChange, setIsChange] = useState(false);
+
   const valueForm = useMemo(() => {
     if (employee) {
-      return parseEmployeeToFormData(employee);
+      return EF.parseEmployeeToFormData(employee);
     } else {
       return {
         name: '',
         positions: [
           {
             id: undefined,
+            toolLanguages: [
+              {
+                id: undefined,
+              },
+            ],
           },
         ],
       };
     }
   }, []);
 
-  const formSubmitHandler: FormProps<EmployeeFormField>['onFinish'] = (values) => {
-    console.log(values);
+  const formSubmitHandler: FormProps<EmployeeFormField>['onFinish'] = async (values) => {
+    if (type === 'Create') {
+      const parseEmployee = EF.parseFormDataToCreateEmployee(values);
+      await employeeService.createEmployee(parseEmployee);
+    } else {
+      const parseEmployee = EF.parseFormDataToUpdateEmployee(values, employee!);
+      await employeeService.updateEmployee(parseEmployee);
+      navigate('/');
+    }
   };
 
   useEffect(() => {
@@ -77,7 +93,13 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type, employee }) 
   return (
     <>
       <Typography.Title level={2}>{`${type} employee profile`}</Typography.Title>
-      <Form form={form} name="employee-form" initialValues={valueForm} onFinish={formSubmitHandler}>
+      <Form
+        form={form}
+        name="employee-form"
+        initialValues={valueForm}
+        onFieldsChange={() => setIsChange(true)}
+        onFinish={formSubmitHandler}
+      >
         <FormWrapperComponent className="mb-2">
           <Form.Item<EmployeeFormField>
             label="Name"
@@ -174,7 +196,8 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type, employee }) 
               <Button
                 type="primary"
                 htmlType="submit"
-                className="bg-green-600 hover:bg-green-500 col-span-2 text-sm md:text-base"
+                disabled={type === 'Edit' && !isChange}
+                className="bg-green-600 hover:bg-green-500 col-span-2 text-sm md:text-base disabled:bg-green-100 disabled:text-green-600"
               >
                 Save
               </Button>
