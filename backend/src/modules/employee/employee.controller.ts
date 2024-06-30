@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { UpdateEmployeeDto } from 'src/core/dtos/employee.dto';
 import { Employee } from 'src/core/models/employee.entity';
 import { EmployeeService } from './employee.service';
 
@@ -12,8 +13,8 @@ export class EmployeeController {
   }
 
   @Get()
-  findAll() {
-    return this.employeeService.findAll();
+  async findAll() {
+    return await this.employeeService.findAll();
   }
 
   @Get(':id')
@@ -22,7 +23,7 @@ export class EmployeeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: Employee) {
+  update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
     return this.employeeService.update(+id, updateEmployeeDto);
   }
 
