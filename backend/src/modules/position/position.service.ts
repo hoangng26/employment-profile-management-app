@@ -40,6 +40,10 @@ export class PositionService {
 
   async update(id: number, updatePositionDto: UpdatePositionDto): Promise<Position> {
     const { toolLanguages, ...positionDto } = updatePositionDto;
+    if (!id) {
+      return await this.create(updatePositionDto);
+    }
+
     await Promise.all(toolLanguages.map((item) => this.toolLanguageService.update(item.id, item)));
 
     return await this.positionRepository.update<Position>(positionDto, {
@@ -50,8 +54,30 @@ export class PositionService {
     })[0];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} position`;
+  async remove(id: number) {
+    await this.toolLanguageService.removeWithPositionId(id);
+
+    return await this.positionRepository.destroy<Position>({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async removeWithEmployeeId(employeeId: number): Promise<number> {
+    const positions = await this.positionRepository.findAll<Position>({
+      where: {
+        employeeId,
+      },
+    });
+
+    await Promise.all(positions.map((item) => this.toolLanguageService.removeWithPositionId(item.id)));
+
+    return await this.positionRepository.destroy<Position>({
+      where: {
+        employeeId,
+      },
+    });
   }
 
   async getResource() {

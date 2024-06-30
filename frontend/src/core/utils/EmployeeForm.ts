@@ -58,14 +58,17 @@ class EmployeeForm {
       avatarUrl: employee.avatarUrl,
       positions: data.positions.map(
         ({ id: pId, toolLanguages }, pIndex): Position => ({
-          id: employee.positions[pIndex].id,
+          id: employee.positions[pIndex] ? employee.positions[pIndex].id : undefined,
           employeeId: employee.id,
           positionResourceId: pId!,
           displayOrder: pIndex + 1,
           toolLanguages: toolLanguages.map(
             ({ id: tlId, from, to, description }, tlIndex): ToolLanguage => ({
-              id: employee.positions[pIndex].toolLanguages[tlIndex].id,
-              positionId: employee.positions[pIndex].id,
+              id:
+                employee.positions[pIndex] && employee.positions[pIndex].toolLanguages[tlIndex]
+                  ? employee.positions[pIndex].toolLanguages[tlIndex].id
+                  : undefined,
+              positionId: employee.positions[pIndex] ? employee.positions[pIndex].id : undefined,
               toolLanguageResourceId: tlId!,
               displayOrder: tlIndex + 1,
               description,

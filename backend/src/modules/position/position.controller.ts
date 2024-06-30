@@ -33,7 +33,7 @@ export class PositionController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.positionService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.positionService.remove(+id);
   }
 }

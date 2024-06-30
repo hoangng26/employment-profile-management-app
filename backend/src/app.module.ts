@@ -9,7 +9,14 @@ import { PositionModule } from './modules/position/position.module';
 import { ToolLanguageModule } from './modules/tool-language/tool-language.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, EmployeeModule, ImageModule, PositionModule, ToolLanguageModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    DatabaseModule,
+    EmployeeModule,
+    ImageModule,
+    PositionModule,
+    ToolLanguageModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

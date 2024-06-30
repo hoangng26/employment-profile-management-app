@@ -22,6 +22,11 @@ class EmployeeService {
     const url = `${apiService.apiEndpoint}${apiService.apiEmployees}/${employee.id}`;
     return await axios.patch(url, employee);
   }
+
+  async deleteEmployee(id: number): Promise<AxiosResponse> {
+    const url = `${apiService.apiEndpoint}${apiService.apiEmployees}/${id}`;
+    return await axios.delete(url);
+  }
 }
 
 export const employeeService = new EmployeeService();

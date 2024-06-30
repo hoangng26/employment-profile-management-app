@@ -81,7 +81,13 @@ export class EmployeeService {
     })[0];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<number> {
+    await this.positionService.removeWithEmployeeId(id);
+
+    return this.employeeRepository.destroy({
+      where: {
+        id,
+      },
+    });
   }
 }

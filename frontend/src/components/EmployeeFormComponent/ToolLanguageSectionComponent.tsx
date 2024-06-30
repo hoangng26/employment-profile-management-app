@@ -33,6 +33,12 @@ const ToolLanguageSectionComponent: React.FC<ToolLanguageProps> = ({ positionNam
   };
 
   useEffect(() => {
+    if (positions && positions[positionName] && !positions[positionName].toolLanguages) {
+      addBtnRef.current!.click();
+    }
+  }, [positions]);
+
+  useEffect(() => {
     if (isDisplay && positionResource.length) {
       const findOption = positionResource.find((item) => item.id === positions[positionName].id);
       setOptions(findOption!.toolLanguageResources);

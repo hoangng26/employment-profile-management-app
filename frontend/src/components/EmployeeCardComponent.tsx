@@ -1,9 +1,11 @@
 import { Employee } from '@/core/models/Employee';
 import TLImage from '@/core/models/TLImage';
+import { FETCH_EMPLOYEES } from '@/core/redux/action';
 import { employeeService } from '@/core/services/EmployeeService';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Avatar, Card, Image, Skeleton, Typography } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CustomCarousel from './CustomCarousel';
 
@@ -14,6 +16,7 @@ interface EmployeeCardComponentProps {
 const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee }) => {
   const [photos, setPhotos] = useState<TLImage[]>([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const employeePhotos = useMemo(() => photos, [photos, employee]);
 
   const editBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
@@ -21,9 +24,10 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
     navigate(`/edit/${employee.id}`);
   };
 
-  const deleteBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
+  const deleteBtnHandler: React.MouseEventHandler<HTMLSpanElement> = async (event) => {
     event.stopPropagation();
-    console.log('Deleted');
+    await employeeService.deleteEmployee(employee.id!);
+    dispatch(FETCH_EMPLOYEES());
   };
 
   useEffect(() => {
@@ -32,7 +36,7 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
     }
 
     async function getEmployee() {
-      const { data } = await employeeService.getEmployee(employee.id);
+      const { data } = await employeeService.getEmployee(employee.id!);
       const { positions } = data;
       const images = getAllEmployeeImage(positions);
       setPhotos(images);

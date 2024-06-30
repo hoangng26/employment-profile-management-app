@@ -25,6 +25,10 @@ export class ToolLanguageService {
   }
 
   async update(id: number, updateToolLanguageDto: UpdateToolLanguageDto): Promise<ToolLanguage> {
+    if (!id) {
+      return await this.create(updateToolLanguageDto);
+    }
+
     return await this.toolLanguageRepository.update<ToolLanguage>(updateToolLanguageDto, {
       where: {
         id,
@@ -33,7 +37,19 @@ export class ToolLanguageService {
     })[0];
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} toolLanguage`;
+  async removeWithPositionId(positionId: number): Promise<number> {
+    return await this.toolLanguageRepository.destroy<ToolLanguage>({
+      where: {
+        positionId,
+      },
+    });
+  }
+
+  async remove(id: number) {
+    return await this.toolLanguageRepository.destroy<ToolLanguage>({
+      where: {
+        id,
+      },
+    });
   }
 }

@@ -27,7 +27,7 @@ export class ToolLanguageController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.toolLanguageService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.toolLanguageService.remove(+id);
   }
 }

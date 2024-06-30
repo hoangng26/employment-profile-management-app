@@ -1,7 +1,9 @@
 import { Employee } from '@/core/models/Employee';
 import PositionResource from '@/core/models/PositionResource';
-import { FETCH_POSITION_RESOURCE, useAppDispatch, useAppState } from '@/core/redux/action';
+import { FETCH_EMPLOYEES, FETCH_POSITION_RESOURCE, useAppDispatch, useAppState } from '@/core/redux/action';
 import { employeeService } from '@/core/services/EmployeeService';
+import { positionService } from '@/core/services/PositionService';
+import { toolLanguageService } from '@/core/services/ToolLanguageService';
 import { EF } from '@/core/utils/EmployeeForm';
 import { Button, Form, FormProps, Input, Typography } from 'antd';
 import { Dayjs } from 'dayjs';
@@ -68,9 +70,32 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type, employee }) 
       await employeeService.createEmployee(parseEmployee);
     } else {
       const parseEmployee = EF.parseFormDataToUpdateEmployee(values, employee!);
+
+      employee!.positions.forEach((item, index) => {
+        const check = parseEmployee.positions.find((pE) => pE.id === item.id);
+        if (!check) {
+          positionService.deletePosition(item.id!);
+          return;
+        }
+
+        item.toolLanguages.forEach((tl) => {
+          const tlCheck = parseEmployee.positions[index].toolLanguages.find((pTL) => pTL.id === tl.id);
+          if (!tlCheck) {
+            toolLanguageService.deleteToolLanguage(tl.id!);
+            return;
+          }
+        });
+      });
       await employeeService.updateEmployee(parseEmployee);
-      navigate('/');
     }
+    dispatch(FETCH_EMPLOYEES());
+    navigate('/');
+  };
+
+  const deleteBtnHandler = async () => {
+    await employeeService.deleteEmployee(employee!.id!);
+    dispatch(FETCH_EMPLOYEES());
+    navigate('/');
   };
 
   useEffect(() => {
@@ -156,7 +181,9 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type, employee }) 
                         ref={addPositionBtnRef}
                         className="text-wrap text-sm md:text-base col-span-3 md:col-span-2"
                         type="primary"
-                        onClick={() => positionAction.add()}
+                        onClick={() => {
+                          positionAction.add();
+                        }}
                       >
                         Add position
                       </Button>
@@ -184,7 +211,12 @@ const EmployeeFormComponent: React.FC<EmployeeFormProps> = ({ type, employee }) 
               {type === 'Create' && <span className="col-span-4"></span>}
               {type !== 'Create' && (
                 <>
-                  <Button type="primary" className="col-span-3 md:col-span-2 text-sm md:text-base" danger>
+                  <Button
+                    type="primary"
+                    className="col-span-3 md:col-span-2 text-sm md:text-base"
+                    danger
+                    onClick={deleteBtnHandler}
+                  >
                     Delete
                   </Button>
                   <span className="col-span-1 md:col-span-2"></span>
