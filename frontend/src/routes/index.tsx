@@ -1,6 +1,6 @@
 import MainLayoutComponent from '@/layouts/MainLayout';
 import EmployeeCreatePageComponent from '@/pages/Employee/Create';
-import EmployeeEditPageComponent from '@/pages/Employee/Edit';
+import EmployeeEditPageComponent, { EmployeeEditPageLoader } from '@/pages/Employee/Edit';
 import HomePageComponent from '@/pages/Home';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -18,8 +18,9 @@ export const browserRouter = createBrowserRouter([
         element: <EmployeeCreatePageComponent />,
       },
       {
-        path: 'edit',
+        path: 'edit/:id',
         element: <EmployeeEditPageComponent />,
+        loader: EmployeeEditPageLoader,
       },
     ],
   },

@@ -48,5 +48,5 @@ export class ToolLanguage extends Model<ToolLanguage> {
   images: ToolLanguageImage[];
 
   @BelongsTo(() => Position)
-  positionResource: Position;
+  position: Position;
 }

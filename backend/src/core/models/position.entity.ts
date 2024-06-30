@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
 import { Employee } from './employee.entity';
 import { PositionResource } from './position-resource.entity';
-import { ToolLanguage } from './tool-language.entity';
+import { ToolLanguageResource } from './tool-language-resource.entity';
 
 @Table({
   paranoid: true,
@@ -30,6 +30,6 @@ export class Position extends Model<Position> {
   @BelongsTo(() => Employee)
   employee: Employee;
 
-  @HasMany(() => ToolLanguage, 'positionId')
-  toolLanguages: ToolLanguage[];
+  @HasMany(() => ToolLanguageResource, 'positionId')
+  toolLanguages: ToolLanguageResource[];
 }
