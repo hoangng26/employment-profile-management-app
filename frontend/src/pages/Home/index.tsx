@@ -1,6 +1,7 @@
 import EmployeeCardComponent from '@/components/EmployeeCardComponent';
 import { Employee } from '@/core/models/Employee';
 import { useAppState } from '@/core/redux/action';
+import { getEmployeeYearExperience } from '@/core/utils';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Skeleton, Typography } from 'antd';
 import { SearchProps } from 'antd/es/input';
@@ -50,7 +51,9 @@ const HomePageComponent: React.FC = () => {
   };
 
   const initialDisplayEmployee = () => {
-    setDisplayedEmployees(employees.slice(0, 12));
+    setDisplayedEmployees(
+      employees.slice(0, 12).sort((e1, e2) => (getEmployeeYearExperience(e1) < getEmployeeYearExperience(e2) ? 1 : -1)),
+    );
   };
 
   useEffect(() => {

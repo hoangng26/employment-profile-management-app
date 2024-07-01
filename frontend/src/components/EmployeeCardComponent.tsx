@@ -3,8 +3,11 @@ import PositionResource from '@/core/models/PositionResource';
 import TLImage from '@/core/models/TLImage';
 import { FETCH_EMPLOYEES, useAppState } from '@/core/redux/action';
 import { employeeService } from '@/core/services/EmployeeService';
+import { getEmployeeYearExperience } from '@/core/utils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Avatar, Card, Image, Skeleton, Typography } from 'antd';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +17,8 @@ interface EmployeeCardComponentProps {
   employee: Employee;
 }
 
+dayjs.extend(relativeTime);
+
 const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee }) => {
   const { positionResource } = useAppState();
 
@@ -22,6 +27,7 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
   const dispatch = useDispatch();
   const employeePhotos = useMemo(() => photos, [photos, employee]);
   const [displayPosition, setDisplayPosition] = useState<PositionResource>();
+  const [exp, setExp] = useState(0);
 
   const editBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
     event.stopPropagation();
@@ -40,6 +46,10 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
       setDisplayPosition(checkPR);
     }
   }, [positionResource]);
+
+  useEffect(() => {
+    setExp(getEmployeeYearExperience(employee));
+  }, []);
 
   useEffect(() => {
     function getAllEmployeeImage(positions: any) {
@@ -89,7 +99,7 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
           <div className="">
             <span className="flex justify-between items-center">
               <span className="font-semibold">{employee.name}</span>
-              <span className="font-medium text-xs">5 yrs</span>
+              <span className="font-medium text-xs">{Math.ceil(exp)} yrs</span>
             </span>
             <span>{displayPosition ? displayPosition.name : ''}</span>
           </div>
