@@ -9,11 +9,11 @@ export function* fetchEmployeesSaga() {
   const response: AxiosResponse = yield call(employeeService.getAllEmployees);
   const { data: users } = response;
   const parseUsers: Employee[] = users.map(
-    ({ id, name, avatarUrl }: any): Employee => ({
+    ({ id, name, avatarUrl, positions }: any): Employee => ({
       id,
       name,
       avatarUrl,
-      positions: [],
+      positions,
     }),
   );
 

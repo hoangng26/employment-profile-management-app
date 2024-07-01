@@ -1,6 +1,7 @@
 import { Employee } from '@/core/models/Employee';
+import PositionResource from '@/core/models/PositionResource';
 import TLImage from '@/core/models/TLImage';
-import { FETCH_EMPLOYEES } from '@/core/redux/action';
+import { FETCH_EMPLOYEES, useAppState } from '@/core/redux/action';
 import { employeeService } from '@/core/services/EmployeeService';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Avatar, Card, Image, Skeleton, Typography } from 'antd';
@@ -14,10 +15,13 @@ interface EmployeeCardComponentProps {
 }
 
 const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee }) => {
+  const { positionResource } = useAppState();
+
   const [photos, setPhotos] = useState<TLImage[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const employeePhotos = useMemo(() => photos, [photos, employee]);
+  const [displayPosition, setDisplayPosition] = useState<PositionResource>();
 
   const editBtnHandler: React.MouseEventHandler<HTMLSpanElement> = (event) => {
     event.stopPropagation();
@@ -29,6 +33,13 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
     await employeeService.deleteEmployee(employee.id!);
     dispatch(FETCH_EMPLOYEES());
   };
+
+  useEffect(() => {
+    const checkPR = positionResource[employee.positions[0].positionResourceId];
+    if (checkPR) {
+      setDisplayPosition(checkPR);
+    }
+  }, [positionResource]);
 
   useEffect(() => {
     function getAllEmployeeImage(positions: any) {
@@ -65,6 +76,7 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
               placeholder={<Skeleton.Image className="w-full h-full object-cover" active />}
             />
           ))}
+          {!employeePhotos.length && <Skeleton.Image className="w-full h-52 object-cover flex items-center" active />}
         </CustomCarousel>
       }
       actions={[
@@ -79,7 +91,7 @@ const EmployeeCardComponent: React.FC<EmployeeCardComponentProps> = ({ employee 
               <span className="font-semibold">{employee.name}</span>
               <span className="font-medium text-xs">5 yrs</span>
             </span>
-            <span>Frontend Developer</span>
+            <span>{displayPosition ? displayPosition.name : ''}</span>
           </div>
         }
         avatar={<Avatar src={employee.avatarUrl} alt={`${employee.id}-avt`} />}
