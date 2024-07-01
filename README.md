@@ -38,4 +38,4 @@
 
 ## Database structure
 
-![Imgur](https://i.imgur.com/bicbyYC.png)
+![Imgur](https://i.imgur.com/KOsAVGe.png)
