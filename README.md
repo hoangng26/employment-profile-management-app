@@ -35,3 +35,7 @@
 - NestJS
 - Sequelize
 - SQLite3
+
+## Database structure
+
+![Imgur](https://i.imgur.com/bicbyYC.png)
